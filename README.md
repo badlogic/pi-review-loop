@@ -19,14 +19,14 @@ pi update --extensions
 Start pi in a Git repository and open the reviewer:
 
 ```text
-/review
+/diff-review
 ```
 
-The command returns immediately; it does not replace pi's editor. Running `/review` again brings the existing review window forward.
+The command returns immediately; it does not replace pi's editor. Running `/diff-review` again brings the existing review window forward.
 
 ## Review workflow
 
-1. Open the window with `/review`.
+1. Open the window with `/diff-review`.
 2. Select a file from **Recently Changed** or the **Files** tree.
 3. Review its diff.
 4. Hover a line number to reveal a `+`, then click it to add an inline comment.
@@ -102,11 +102,11 @@ Each submitted review appends a `review-loop/checkpoint` custom entry to the act
 - reviewed paths,
 - and the composed feedback.
 
-When the session is resumed, `/review` restores the latest checkpoint on the active session branch and compares it with the current workspace. Session branching therefore also branches review state.
+When the session is resumed, `/diff-review` restores the latest checkpoint on the active session branch and compares it with the current workspace. Session branching therefore also branches review state.
 
 Custom entries do not participate in model context. In an ephemeral `--no-session` run, checkpoint state lasts only for that process.
 
-The review window closes when pi shuts down, switches sessions, or reloads extensions. Run `/review` again after a reload or session switch.
+The review window closes when pi shuts down, switches sessions, or reloads extensions. Run `/diff-review` again after a reload or session switch.
 
 ## Requirements
 

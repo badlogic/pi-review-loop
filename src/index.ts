@@ -26,7 +26,7 @@ export default function reviewLoop(pi: ExtensionAPI) {
     }
   };
 
-  pi.registerCommand("review", {
+  pi.registerCommand("diff-review", {
     description: "Open the persistent incremental diff reviewer",
     handler: openReview,
   });
