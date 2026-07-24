@@ -78,6 +78,7 @@ button { color: inherit; }
 .primary.small { padding: 5px 10px; }
 .quiet { padding: 5px 8px; background: var(--panel); color: var(--muted); font-size: 11px; }
 .quiet:hover:not(:disabled) { color: var(--text); background: var(--hover); }
+.quiet.active { border-color: #405273; background: var(--accent-bg); color: var(--accent-strong); }
 .quiet:disabled { opacity: .35; cursor: default; }
 .icon-button { border-color: transparent; background: transparent; color: var(--muted); font-size: 18px; line-height: 18px; }
 .icon-button:hover { color: var(--text); }
@@ -161,7 +162,8 @@ button { color: inherit; }
 .filebar { height: 38px; display: flex; flex: 0 0 38px; align-items: center; justify-content: space-between; padding: 0 10px 0 13px; border-bottom: 1px solid var(--border-soft); background: var(--panel); }
 .file-title { display: flex; min-width: 0; align-items: center; gap: 6px; }
 .file-title #file-path { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
-.file-actions { display: flex; align-items: center; gap: 10px; }
+.file-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 10px; }
+.file-actions button { white-space: nowrap; }
 .comment-hint { color: var(--faint); font-size: 10px; }
 .editor { min-height: 0; flex: 1; }
 .hidden { display: none !important; }

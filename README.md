@@ -86,6 +86,7 @@ Review Loop does not parse or attribute pi tool calls. Any on-disk change—whet
 - `Cmd+F` on macOS, or `Ctrl+F` elsewhere: search within the focused diff pane
 - Double-click a word: select it and highlight its other occurrences, including overview/minimap markers
 - `Cmd+K` on macOS, or `Ctrl+K` elsewhere: focus the sidebar file filter
+- **Wrap lines** toggles line wrapping in both diff panes
 - Minimap and overview markers show changes, matches, and occurrences
 - Scroll positions are remembered separately for each file and diff mode, including horizontal offsets
 - A file opened for the first time starts at the top-left

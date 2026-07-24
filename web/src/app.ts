@@ -50,6 +50,7 @@ const recentListEl = byId("recent-list");
 const fileTreeEl = byId("file-tree");
 const filePathEl = byId("file-path");
 const fileStatusEl = byId("file-status");
+const lineWrapButton = byId<HTMLButtonElement>("line-wrap");
 const fileCommentButton = byId<HTMLButtonElement>("file-comment");
 const emptyStateEl = byId("empty-state");
 const editorEl = byId("editor");
@@ -432,6 +433,7 @@ function renderFilebar(): void {
   fileStatusEl.className = file ? `status ${file.status}` : "status";
   fileStatusEl.textContent = file ? statusLetter(file.status) : "";
   filePathEl.textContent = file?.path ?? "No changes to review";
+  lineWrapButton.disabled = file == null;
   fileCommentButton.disabled = file == null;
 }
 
@@ -750,6 +752,13 @@ headButton.addEventListener("click", () => {
   send({ type: "set-mode", mode: "head" as ReviewMode });
 });
 searchInput.addEventListener("input", () => { renderRecent(); renderTree(); });
+lineWrapButton.addEventListener("click", () => {
+  const enabled = lineWrapButton.getAttribute("aria-pressed") !== "true";
+  lineWrapButton.setAttribute("aria-pressed", String(enabled));
+  lineWrapButton.classList.toggle("active", enabled);
+  lineWrapButton.title = enabled ? "Disable line wrap" : "Enable line wrap";
+  diffEditor.updateOptions({ diffWordWrap: enabled ? "on" : "off" });
+});
 fileCommentButton.addEventListener("click", openFileDraft);
 addCommentButton.addEventListener("click", addDraft);
 cancelDraftButton.addEventListener("click", () => {
