@@ -10,6 +10,10 @@ import { WorkspaceModel } from "./workspace.js";
 
 export const CHECKPOINT_ENTRY = "review-loop/checkpoint";
 
+export function isIgnoredWatchPath(repoRoot: string, path: string): boolean {
+  return relative(repoRoot, path).split(sep).some((part) => part === ".git" || part === "node_modules");
+}
+
 function isCheckpoint(value: unknown): value is ReviewCheckpoint {
   if (value == null || typeof value !== "object") return false;
   const item = value as Partial<ReviewCheckpoint>;
@@ -93,11 +97,9 @@ export class ReviewController {
   private async startWatcher(): Promise<void> {
     this.watcher = watch(this.repoRoot, {
       ignoreInitial: true,
-      ignored: (path) => {
-        const rel = relative(this.repoRoot, path);
-        return rel === ".git" || rel.startsWith(`.git${sep}`) || rel === "node_modules" || rel.startsWith(`node_modules${sep}`);
-      },
+      ignored: (path) => isIgnoredWatchPath(this.repoRoot, path),
     });
+    this.watcher.on("error", () => {});
     this.watcher.on("all", (_event, path) => {
       const repoPath = this.toRepoPath(path);
       if (repoPath == null) return;

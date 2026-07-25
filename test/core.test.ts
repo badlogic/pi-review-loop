@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import test from "node:test";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { isIgnoredWatchPath } from "../src/controller.js";
 import { composeFeedback } from "../src/prompt.js";
 import { createCheckpoint, decodeStored, parsePorcelainPaths, scanAgainstCheckpoint } from "../src/git.js";
 import { WorkspaceModel } from "../src/workspace.js";
@@ -30,6 +31,12 @@ function fakePi(): ExtensionAPI {
 async function git(cwd: string, ...args: string[]): Promise<void> {
   await execFileAsync("git", args, { cwd });
 }
+
+test("ignores generated dependency and git trees at any depth", () => {
+  assert.equal(isIgnoredWatchPath("/repo", "/repo/packages/app/node_modules/pkg/file.js"), true);
+  assert.equal(isIgnoredWatchPath("/repo", "/repo/packages/app/.git/index"), true);
+  assert.equal(isIgnoredWatchPath("/repo", "/repo/src/file.ts"), false);
+});
 
 test("parses porcelain paths including renames", () => {
   const output = " M src/a.ts\0R  src/new.ts\0src/old.ts\0?? new file.ts\0";
