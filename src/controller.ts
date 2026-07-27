@@ -5,7 +5,7 @@ import { open, type GlimpseWindow } from "glimpseui";
 import { createCheckpoint, getRepoRoot } from "./git.js";
 import { composeFeedback } from "./prompt.js";
 import type { HostMessage, ReviewCheckpoint, WindowMessage } from "./types.js";
-import { loadReviewHtml } from "./ui.js";
+import { reviewHtmlPath } from "./ui.js";
 import { WorkspaceModel } from "./workspace.js";
 
 export const CHECKPOINT_ENTRY = "review-loop/checkpoint";
@@ -65,8 +65,19 @@ export class ReviewController {
     await this.model.refresh();
     await this.startWatcher();
 
-    const window = open(loadReviewHtml(), { width: 1480, height: 920, title: "Review Loop" });
+    const window = open("<!doctype html><title>Loading Review Loop...</title>", {
+      width: 1480,
+      height: 920,
+      title: "Review Loop",
+    });
     this.window = window;
+    window.once("ready", () => {
+      try {
+        window.loadFile(reviewHtmlPath());
+      } catch (error) {
+        ctx.ui.notify(`Review Loop failed to load its UI: ${error instanceof Error ? error.message : String(error)}`, "error");
+      }
+    });
     window.on("message", (value) => {
       const message = parseMessage(value);
       if (message != null) void this.handleMessage(message, ctx);
