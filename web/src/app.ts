@@ -754,10 +754,13 @@ headButton.addEventListener("click", () => {
 searchInput.addEventListener("input", () => { renderRecent(); renderTree(); });
 lineWrapButton.addEventListener("click", () => {
   const enabled = lineWrapButton.getAttribute("aria-pressed") !== "true";
+  const wordWrap = enabled ? "on" : "off";
   lineWrapButton.setAttribute("aria-pressed", String(enabled));
   lineWrapButton.classList.toggle("active", enabled);
   lineWrapButton.title = enabled ? "Disable line wrap" : "Enable line wrap";
-  diffEditor.updateOptions({ diffWordWrap: enabled ? "on" : "off" });
+  // Monaco uses wordWrapOverride1 internally for diffWordWrap. Set the
+  // higher-priority override too so both nested editors receive the toggle.
+  diffEditor.updateOptions({ diffWordWrap: wordWrap, wordWrapOverride2: wordWrap });
 });
 fileCommentButton.addEventListener("click", openFileDraft);
 addCommentButton.addEventListener("click", addDraft);
