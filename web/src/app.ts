@@ -751,6 +751,11 @@ headButton.addEventListener("click", () => {
   saveMountedScroll();
   send({ type: "set-mode", mode: "head" as ReviewMode });
 });
+// × for layer-shell windows (no system title bar); shown when bridge injects __REVIEW_NEEDS_CLOSE.
+const closeBtn = byId<HTMLButtonElement>("window-close");
+if ((window as any).__REVIEW_NEEDS_CLOSE) closeBtn.classList.remove("hidden");
+closeBtn.addEventListener("click", () => (window as any).glimpse?.close());
+
 searchInput.addEventListener("input", () => { renderRecent(); renderTree(); });
 lineWrapButton.addEventListener("click", () => {
   const enabled = lineWrapButton.getAttribute("aria-pressed") !== "true";
