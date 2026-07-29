@@ -16,6 +16,13 @@ function isCheckpoint(value: unknown): value is ReviewCheckpoint {
   return item.version === 1 && typeof item.repoRoot === "string" && typeof item.createdAt === "number" && typeof item.overrides === "object";
 }
 
+/** True where glimpse's window has no title-bar × (Hyprland layer-shell Overlay,
+ * tested); other wlroots unverified; macOS/Windows/X11/GNOME use the system ×. */
+function needsPageCloseButton(): boolean {
+  if (process.platform !== "linux") return false;
+  return Boolean(process.env.HYPRLAND_INSTANCE_SIGNATURE);
+}
+
 function latestCheckpoint(ctx: ExtensionCommandContext, repoRoot: string): ReviewCheckpoint | null {
   const branch = ctx.sessionManager.getBranch();
   for (let index = branch.length - 1; index >= 0; index -= 1) {
@@ -65,7 +72,7 @@ export class ReviewController {
     await this.model.refresh();
     await this.startWatcher();
 
-    const window = open(loadReviewHtml(), { width: 1480, height: 920, title: "Review Loop" });
+    const window = open(loadReviewHtml({ needsCloseButton: needsPageCloseButton() }), { width: 1480, height: 920, title: "Review Loop" });
     this.window = window;
     window.on("message", (value) => {
       const message = parseMessage(value);
